@@ -1,0 +1,46 @@
+{% extends "base.html" %}
+
+{% block content %}
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }} text-center container">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+    {% endwith %}
+
+    <!-- Icons Grid -->
+    <section class="features-icons bg-light text-center">
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-2"></div>
+                <div class="col-lg-4">
+                    <div class="features-icons-item mx-auto mb-5 mb-lg-0 mb-lg-3">
+                        <a href="users" title="Active users" class="card-link" rel="modal:open">
+                            <div class="features-icons-icon d-flex">
+                                <i class="icon-user-following m-auto text-primary"></i>
+                            </div>
+
+                            <h3>Show active users</h3>
+                            <p class="lead mb-0">Show users who used their card recently</p>
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-4">
+                    <div class="features-icons-item mx-auto mb-0 mb-lg-3">
+                        <a href="search" title="Find user" class="card-link">
+                            <div class="features-icons-icon d-flex">
+                                <i class="fa fa-search m-auto text-primary"></i>
+                            </div>
+                            <h3>Find user</h3>
+                            <p class="lead mb-0">If you know user's ID or login you can find him!</p>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+{% endblock content %}

@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<head>
+
+    <meta charset="utf-8">
+    <meta name="description" content="Task v2.0">
+    <meta name="author" content="Иван Лозинский">
+
+    <title>Simple landing page</title>
+    <link rel="icon" href="{{ url_for('static', filename='img/bug.png') }}" title="Langing">
+    <!-- Custom styles -->
+    <link href="{{ url_for('static', filename='css/main.css') }}" rel="stylesheet">
+    <!-- Custom scripts -->
+    <script src="{{ url_for('static', filename='js/main.js') }}"></script>
+
+</head>
+
+<body>
+<section class="menu">
+    <div class="profile_link"><a href="/">Главная</a></div>
+    <div class="profile_link"><a href="/profile">Личный кабинет</a></div>
+    {% if user %}
+        <div class="logout"><a href="/logout">Выйти</a></div>
+    {% endif %}
+</section>
+{% block content %}
+{% endblock %}
+
+</body>
+</html>

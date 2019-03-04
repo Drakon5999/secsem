@@ -1,0 +1,143 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <form class="card card-body" name="card" method="post" action="/profile">
+        {% if success_card %}
+            <p class="good">Данные карты успешно обновлены</p>
+        {% elif fail_card %}
+            <p class="bad">Неверные данные карты</p>
+        {% endif %}
+        <h4 class="account-heading">User login:</h4>
+        <p>{{ user.login }}</p>
+        <hr>
+        <h5>User id:</h5>
+        <p>{{ user.id }}</p>
+        <hr>
+        <h5>Card number:</h5>
+        <p ><input name="card_number" value="{{ user.card_number }}" type="text" id="card_number"><span class="indicator ">{{ wrong_card }}</span></p>
+        <hr>
+        <h5>Money amount:</h5>
+        <p ><input name="money_amount" value="{{ user.money_amount }}" type="number" id="money_amount"><span class="indicator ">{{ wrong_amount }}</span></p>
+        <hr>
+        <h5>Status:</h5>
+        {% if user.status %}
+            <p>Active</p>
+        {% else %}
+            <p><i class="text-secondary">Disabled</i></p>
+        {% endif %}
+
+        <hr>
+        <p><input type="submit" disabled id="submit_card_data" value="Изменить"></p>
+    </form>
+
+    {% if is_admin %}
+        <p class="good"> Вы админ! </p>
+        <form method="post" name="change_password" action="/profile">
+        {% if success_password %}
+            <p class="good">Пароль успешно переустановлен</p>
+        {% elif wrong_login_password %}
+            <p class="good">Такого пользователя нет</p>
+        {% endif %}
+        <h4 class="account-heading">User login:</h4>
+        <p><input type="text" name="change_password_login"></p>
+        <p><input type="password" name="change_password_password"></p>
+        <p><input type="submit" value="Сбросить"></p>
+        </form>
+    {% endif %}
+
+    <script>
+        function luhnAlgorithm(digits) {
+          let sum = 0;
+          if (digits.length < 12) {
+              return false;
+          }
+
+          for (let i = 0; i < digits.length; i++) {
+            let cardNum = parseInt(digits[i]);
+            if (isNaN(cardNum)) {
+                return false;
+            }
+
+            if ((digits.length - i) % 2 === 0) {
+              cardNum = cardNum * 2;
+
+              if (cardNum > 9) {
+                cardNum = cardNum - 9;
+              }
+            }
+
+            sum += cardNum;
+          }
+
+          return sum % 10 === 0;
+        }
+
+
+        function hasClass(ele,cls) {
+            return ele.className.match(new RegExp('(\\s|^)'+cls+'(\\s|$)'));
+        }
+
+        function removeClass(ele,cls) {
+            if (hasClass(ele,cls)) {
+                var reg = new RegExp('(\\s|^)'+cls+'(\\s|$)');
+                ele.className=ele.className.replace(reg,' ');
+            }
+        }
+
+        function addClass(ele,cls) {
+            if (!hasClass(ele,cls)) {
+                ele.className += " " + cls;
+            }
+        }
+
+
+        function checkButton(submit_button) {
+            submit_button.disabled = hasClass(amount_input.nextSibling, "bad") ||
+                hasClass(card_input.nextSibling, "bad");
+        }
+
+
+        function makeOk(elem) {
+            removeClass(elem, "bad");
+            addClass(elem, "good");
+            elem.textContent = "OK";
+        }
+        function makeWrong(elem) {
+            addClass(elem, "bad");
+            removeClass(elem, "good");
+            elem.textContent = "Wrong";
+        }
+
+        let card_input = document.getElementById("card_number");
+        let amount_input = document.getElementById("money_amount");
+        let submit_button = document.getElementById("submit_card_data");
+
+        function checkCard() {
+            let cleared = card_input.value.replace(/\s/gim, "");
+            if (luhnAlgorithm(cleared)) {
+                makeOk(card_input.nextSibling);
+            } else {
+                makeWrong(card_input.nextSibling);
+            }
+
+            checkButton(submit_button);
+        }
+
+        function checkAmount() {
+            let parsed = parseInt(amount_input.value);
+            if (!isNaN(parsed) && parsed >= 0) {
+                makeOk(amount_input.nextSibling);
+            } else {
+                makeWrong(amount_input.nextSibling);
+            }
+
+            checkButton(submit_button);
+        }
+        document.addEventListener('DOMContentLoaded', function(){ // Аналог $(document).ready(function(){
+            checkCard();
+            checkAmount();
+            card_input.oninput = checkCard;
+            amount_input.oninput = checkAmount;
+        });
+    </script>
+{% endblock content %}

@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <div class="card card-body">
+        <h4 class="account-heading">User login:</h4>
+        <p>{{ user.login }}</p>
+        <hr>
+        <h5>User id:</h5>
+        <p>{{ user.id }}</p>
+        <hr>
+        <h5>Card number:</h5>
+        <p class="">{{ user.card_number }}</p>
+        <hr>
+        <h5>Status:</h5>
+        {% if user.status %}
+            <p>Active</p>
+        {% else %}
+            <p><i class="text-secondary">Disabled</i></p>
+        {% endif %}
+    </div>
+
+{% endblock content %}

@@ -1,0 +1,17 @@
+{% extends "base.html" %}
+
+{% block content %}
+    <section>
+        {% if wrong %}
+            <div class="error">Неверный логин или пароль</div>
+        {% endif %}
+        <form method="post" name="login" action="/login">
+            <p>Логин:</p>
+            <input name="login" type="text" value="{{ last_login_value }}">
+            <p>Пароль:</p>
+            <input name="password" type="password">
+            <hr>
+            <input type="submit" value="Войти">
+        </form>
+    </section>
+{% endblock content %}
