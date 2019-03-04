@@ -50,7 +50,7 @@ def users():
 
 @app.route('/by-login', methods=['GET', 'POST'])
 def get_user_login():
-    login = request.form.get('login')
+    login = request.form.get('login') or request.args.get('login')
 
     if login is not None:
         user_query = query_db("SELECT * FROM users where login = ?", (login, ))
@@ -65,7 +65,7 @@ def get_user_login():
 
 @app.route('/by-id', methods=['GET', 'POST'])
 def get_user_id():
-    id = request.form.get('id')
+    id = request.form.get('id') or request.args.get('id')
     print(id)
     if id is not None:
         user_query = query_db("SELECT * FROM users where id = ?", (id, ))
