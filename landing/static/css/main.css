@@ -42,3 +42,10 @@
         transform: scale(1.5) rotate(-45deg) translateX(9%) translateY(10%);
     }
 }
+
+.bad {
+    color: red;
+}
+.good {
+    color: green;
+}

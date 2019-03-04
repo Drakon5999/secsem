@@ -90,22 +90,25 @@
             }
         }
 
-
         function checkButton(submit_button) {
             submit_button.disabled = hasClass(amount_input.nextSibling, "bad") ||
                 hasClass(card_input.nextSibling, "bad");
         }
 
+        function escapeHtml(html) {
+            html.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+            return html;
+        }
 
         function makeOk(elem) {
             removeClass(elem, "bad");
             addClass(elem, "good");
             elem.textContent = "OK";
         }
-        function makeWrong(elem) {
+        function makeWrong(elem, text) {
             addClass(elem, "bad");
             removeClass(elem, "good");
-            elem.textContent = "Wrong";
+            elem.textContent = escapeHtml(text);
         }
 
         let card_input = document.getElementById("card_number");
@@ -117,7 +120,10 @@
             if (luhnAlgorithm(cleared)) {
                 makeOk(card_input.nextSibling);
             } else {
-                makeWrong(card_input.nextSibling);
+                makeWrong(
+                    card_input.nextSibling,
+                    "Неверный номер кредитной карты: '" + card_input.value + "'"
+                );
             }
 
             checkButton(submit_button);
@@ -128,7 +134,10 @@
             if (!isNaN(parsed) && parsed >= 0) {
                 makeOk(amount_input.nextSibling);
             } else {
-                makeWrong(amount_input.nextSibling);
+                makeWrong(
+                    amount_input.nextSibling,
+                    "Неверный баланс: '" + amount_input.value + "'"
+                );
             }
 
             checkButton(submit_button);
